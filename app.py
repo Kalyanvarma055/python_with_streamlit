@@ -40,7 +40,7 @@ if st.checkbox("Show Correlation Heatmap"):
 st.subheader("Train Logistic Regression Model")
 
 X = df[['Gender', 'Helmet_Used', 'Seatbelt_Used', 'Speed_of_Impact']]
-y = df['Severity']  # Assuming 'Severity' is the target column
+y = df['Survived']  # Assuming 'Severity' is the target column
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 model = LogisticRegression()
