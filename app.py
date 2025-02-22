@@ -23,21 +23,21 @@ if st.checkbox("Show Raw Data"):
     st.write(df.head())
 
 # Data Preprocessing
-st.subheader("Data Preprocessing")
+# st.subheader("Data Preprocessing")
 df['Gender'] = df['Gender'].apply(lambda x: 1 if x == 'Male' else 0)
 df['Helmet_Used'] = df['Helmet_Used'].apply(lambda x: 1 if x == 'Yes' else 0)
 df['Seatbelt_Used'] = df['Seatbelt_Used'].apply(lambda x: 1 if x == 'Yes' else 0)
 df['Speed_of_Impact'].fillna(df['Speed_of_Impact'].median(), inplace=True)
 
 # Visualizations
-st.subheader("Data Visualization")
-if st.checkbox("Show Correlation Heatmap"):
-    plt.figure(figsize=(10, 6))
-    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
-    st.pyplot(plt)
+# st.subheader("Data Visualization")
+# if st.checkbox("Show Correlation Heatmap"):
+    #plt.figure(figsize=(10, 6))
+    #sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    #st.pyplot(plt)
 
 # Model Training
-st.subheader("Train Logistic Regression Model")
+# st.subheader("Train Logistic Regression Model")
 
 X = df[['Gender', 'Helmet_Used', 'Seatbelt_Used', 'Speed_of_Impact']]
 y = df['Survived']  # Assuming 'Severity' is the target column
@@ -48,9 +48,9 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 
-st.write(f"Model Accuracy: {accuracy:.2f}")
-st.text("Classification Report:")
-st.text(classification_report(y_test, y_pred))
+# st.write(f"Model Accuracy: {accuracy:.2f}")
+# st.text("Classification Report:")
+# st.text(classification_report(y_test, y_pred))
 
 # Prediction UI
 st.subheader("Make a Prediction")
@@ -59,9 +59,11 @@ helmet_used = st.radio("Helmet Used?", ["Yes", "No"])
 seatbelt_used = st.radio("Seatbelt Used?", ["Yes", "No"])
 speed_of_impact = st.number_input("Speed of Impact", min_value=0.0, step=0.1)
 
-if st.button("Predict Severity"):
+if st.button("Predict Survival"):
     input_data = np.array([[1 if gender == "Male" else 0, 1 if helmet_used == "Yes" else 0, 1 if seatbelt_used == "Yes" else 0, speed_of_impact]])
     prediction = model.predict(input_data)
-    st.write(f"Predicted Severity: {prediction[0]}")
+    if prediction == 1:
+        st.write("You are most likely to survive")
+    else:
+        st.write("You are most likely not going to survive")
 
-st.write("Built with Streamlit!")
